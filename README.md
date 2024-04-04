@@ -33,6 +33,18 @@ Now install the required dependencies.
 pip install -r requirements.txt
 ```
 
+Rename the .env.example file to .env file.
+
+In Unix based system you can use the following:
+
+```bash
+mb .env.example .env
+```
+
+In windows you can manually do the same.
+
+Next update the required values in the .env file.
+
 **Next enter the data into the .env file.**
 
 Now run the backend server.
@@ -56,6 +68,18 @@ Install the dependencies
 ```
 bun install
 ```
+
+Rename the .env.example file to .env file.
+
+In Unix based system you can use the following:
+
+```bash
+mb .env.example .env
+```
+
+In windows you can manually do the same.
+
+Next update the required values in the .env file.
 
 Run the development server:
 
