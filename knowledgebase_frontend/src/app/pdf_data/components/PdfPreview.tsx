@@ -10,7 +10,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ filePath }) => {
     <>
       <div className="min-h-screen h-full w-full flex items-center justify-center bg-gray-100">
         <main className="w-full h-full bg-white rounded shadow-md">
-          <iframe src={""} className="w-full h-full border border-gray-300"></iframe>
+          <iframe src={filePath} className="w-full h-full border border-gray-300"></iframe>
         </main>
       </div>
     </>

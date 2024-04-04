@@ -1,16 +1,47 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import PDFViewer from "../components/PdfPreview";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import PdfInterface from "@/domain/interfaces/PdfInterface";
+import PdfRepository from "@/infrastructure/repositories/PdfRepository";
+import FileService from "@/domain/usecases/FileService";
+import { PdfInfo } from "@/domain/entities/Types/pdf_types";
+
+const pdfRepository = new PdfRepository();
+const pdfInterface: PdfInterface = new FileService(pdfRepository);
 
 export default function Page({ params }: { params: { pdf_path: string } }) {
   const [open, setOpen] = useState(false);
+  const [presignedPdfUrl, setPresignedPdfUrl] = useState<string>("");
 
   const cancelButtonRef = useRef(null);
+
+  useEffect(() => {
+    async function fetchPdfData() {
+      const access_token = localStorage.getItem("access_token") || null;
+
+      console.log(access_token);
+      try {
+        if (access_token) {
+          const pdfs = await pdfInterface.fetchPdfPresignedUrl(access_token, params.pdf_path);
+          console.log("The pdf", pdfs);
+          if (pdfs?.code===200) {
+            console.log(pdfs?.data.url)
+            setPresignedPdfUrl(pdfs?.data.url);
+          }
+
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchPdfData();
+  }, [params.pdf_path]);
 
   return (
     <>
@@ -19,7 +50,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
           <div className="flex flex-row items-center  gap-2 p-4">
             <Link href="/" className="flex items-center gap-2">
               <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white font-sans">knowledgebase.ai - PDF DASHBOARD</span>
+              <span className="self-center text-2xl font-semibold whitespace-nowrap  font-sans">knowledgebase.ai - PDF DASHBOARD</span>
             </Link>
             <button
               data-collapse-toggle="navbar-multi-level"
@@ -86,7 +117,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
           <div className="grow flex flex-row bg-gray-50 h-full">
             {" "}
             <div className="w-1/2 border-r border-gray-200 h-full  ">
-              <PDFViewer filePath="https://powerunit-ju.com/wp-content/uploads/2021/04/Aurelien-Geron-Hands-On-Machine-Learning-with-Scikit-Learn-Keras-and-Tensorflow_-Concepts-Tools-and-Techniques-to-Build-Intelligent-Systems-OReilly-Media-2019.pdf" />
+              <PDFViewer filePath={presignedPdfUrl} />
             </div>
             <div className="grow flex flex-col">
               <div className="h-5/6">

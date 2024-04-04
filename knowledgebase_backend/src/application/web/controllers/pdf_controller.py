@@ -133,7 +133,9 @@ async def get_pdf_url(
             content={"status": "error", "message": "File does not belong to user"},
         )
     
-    file_name = user+ file_name
+
+
+    print(file_name)
     # Get the URL of the PDF from the S3 bucket
     url = aws_interface.get_presigned_pdf_url(file_name)
 
@@ -141,7 +143,7 @@ async def get_pdf_url(
     if url is not None:
         # Return the URL
         return JSONResponse(
-            status_code=404,
+            status_code=200,
             content={"status": "success", "url": url},
         )
 
