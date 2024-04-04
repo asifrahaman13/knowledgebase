@@ -121,7 +121,6 @@ async def get_pdf_url(
             status_code=404,
             content={"status": "error", "message": "Invalid token"},
         )
-    
 
     # Check if the file actually belongs to the user.
     belongs_to_user = database_interface.check_if_file_belongs_to_user(user, file_name)
@@ -132,10 +131,6 @@ async def get_pdf_url(
             status_code=404,
             content={"status": "error", "message": "File does not belong to user"},
         )
-    
-
-
-    print(file_name)
     # Get the URL of the PDF from the S3 bucket
     url = aws_interface.get_presigned_pdf_url(file_name)
 

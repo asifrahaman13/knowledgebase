@@ -9,10 +9,10 @@ import PdfInterface from "@/domain/interfaces/PdfInterface";
 import PdfRepository from "@/infrastructure/repositories/PdfRepository";
 import FileService from "@/domain/usecases/FileService";
 import { PdfInfo } from "@/domain/entities/Types/pdf_types";
+import UploadPdf from "./components/UploadPdf";
 
 const pdfRepository = new PdfRepository();
 const pdfInterface: PdfInterface = new FileService(pdfRepository);
-
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -20,14 +20,16 @@ function classNames(...classes: string[]) {
 
 export default function Example() {
   const [pdfData, setPdfData] = useState<PdfInfo[]>([]);
+  const [uploadPdf, setUploadPdf] = useState<boolean>(false);
+  const [counter, setCounter] = useState<number>(0);
+
   useEffect(() => {
     async function fetchPdfData() {
       const access_token = localStorage.getItem("access_token") || null;
-      console.log(access_token);
+
       try {
         if (access_token) {
           const pdfs = await pdfInterface.fetchAllPdfs(access_token);
-          console.log("The pdf", pdfs);
           setPdfData(pdfs?.data);
         }
       } catch (error) {
@@ -37,9 +39,14 @@ export default function Example() {
 
     fetchPdfData();
   }, []);
+
+  function UploadPdfHandle() {
+    setUploadPdf(!uploadPdf);
+    setCounter(counter + 1);
+  }
   return (
     <>
-      <div className="bg-gray-50 flex flex-col gap-12">
+      <div className="bg-gray-50 h-screen flex flex-col gap-12">
         <header className="text-gray-600 body-font bg-white">
           <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
             <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
@@ -71,8 +78,19 @@ export default function Example() {
             </button>
           </div>
         </header>
-        <div className="flex justify-center px-4 ">
-          <ul role="list" className="divide-y w-5/6 flex flex-col gap-4 divide-gray-100">
+        <div className="flex justify-center xl:px-4 ">
+          <ul role="list" className="divide-y w-full xl:w-5/6 flex flex-col gap-4 divide-gray-100">
+            <div className="w-full flex flex-row ">
+              <button
+                className="ml-auto rounded-lg bg-Pri-Dark text-white px-5 py-2.5"
+                onClick={(e) => {
+                  e.preventDefault();
+                  UploadPdfHandle();
+                }}
+              >
+                Upload New
+              </button>
+            </div>
             {pdfData.map((project) => (
               <li key={project._id} className="flex items-center justify-between gap-x-6 gap-4 py-5 px-12 rounded-lg bg-white">
                 <div className="min-w-0 flex flex-col gap-4">
@@ -83,7 +101,7 @@ export default function Example() {
                   </p> */}
                   </div>
                   <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
-                    <p className="bg-purple-50 text-purple-500 rounded-lg px-5 py-2">Due on {project.tag}</p>
+                    <p className="bg-purple-50 text-purple-500 rounded-lg px-5 py-2"> {project.tag}</p>
 
                     <p className="truncate bg-yellow-50 text-yellow-500 rounded-lg px-5 py-2">Created by {project.username}</p>
                   </div>
@@ -141,6 +159,7 @@ export default function Example() {
           </ul>
         </div>
       </div>
+      <UploadPdf key={counter} counter={counter}/>
     </>
   );
 }
