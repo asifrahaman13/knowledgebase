@@ -15,7 +15,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
   return (
     <>
       <div className="h-screen w-screen overflow-y-hidden flex flex-col">
-        <nav className="bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-800">
+        <nav className="bg-white border-gray-200  dark:border-gray-800">
           <div className="flex flex-row items-center  gap-2 p-4">
             <Link href="/" className="flex items-center gap-2">
               <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
@@ -34,10 +34,10 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
               </svg>
             </button>
             <div className="   ml-auto " id="navbar-multi-level">
-              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-800 dark:border-gray-700">
+              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white   dark:border-gray-700">
                 <li>
                   <button
-                    className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent  md:p-0 md:dark:bg-transparent"
+                    className="block py-2 px-3  bg-blue-700 rounded md:bg-transparent  md:p-0 md:dark:bg-transparent"
                     aria-current="page"
                     onClick={(e) => {
                       setOpen(true);
@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                 </li>
 
                 <li>
-                  <Link href="/" className="block py-2 px-3 text-white  rounded md:bg-transparent  md:p-0  md:dark:bg-transparent" aria-current="page">
+                  <Link href="/" className="block py-2 px-3   rounded md:bg-transparent  md:p-0  md:dark:bg-transparent" aria-current="page">
                     Home
                   </Link>
                 </li>
@@ -56,7 +56,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                 <li>
                   <a
                     href="#"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="block py-2 px-3  rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  md:dark:hover:text-blue-500 dark:hover:bg-gray-700  md:dark:hover:bg-transparent"
                   >
                     Report issues
                   </a>
@@ -64,7 +64,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                 <li>
                   <Link
                     href="/pricing"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 :dark:hover:bg-transparent"
                   >
                     Pricing
                   </Link>
@@ -72,7 +72,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                 <li>
                   <Link
                     href="/contact"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700  md:dark:hover:bg-transparent"
                   >
                     Contact
                   </Link>
@@ -83,15 +83,15 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
         </nav>
 
         <div className="flex flex-grow h-full">
-          <div className="grow flex flex-row bg-gray-100 h-full">
+          <div className="grow flex flex-row bg-gray-50 h-full">
             {" "}
-            <div className="w-1/2 border-r border-gray-200 h-full  bg-red-200">
+            <div className="w-1/2 border-r border-gray-200 h-full  ">
               <PDFViewer filePath="https://powerunit-ju.com/wp-content/uploads/2021/04/Aurelien-Geron-Hands-On-Machine-Learning-with-Scikit-Learn-Keras-and-Tensorflow_-Concepts-Tools-and-Techniques-to-Build-Intelligent-Systems-OReilly-Media-2019.pdf" />
             </div>
             <div className="grow flex flex-col">
               <div className="h-5/6">
                 <div className="flex items-start gap-2.5 w-full flex-col px-12 py-4 h-full overflow-y-scroll no-scrollbar">
-                  <div className="flex flex-col max-w-3/4 leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-200">
+                  <div className="flex flex-col max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl ">
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
                       <span className="text-sm font-semibold text-gray-900 dark:text-black">Bonnie Green</span>
                       <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
@@ -100,12 +100,12 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
                   </div>
 
-                  <div className="flex flex-col ml-auto  max-w-3/4 leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                  <div className="flex flex-col ml-auto  max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl ">
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
+                      <span className="text-sm font-semibold ">Bonnie Green</span>
                       <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
                     </div>
-                    <p className="text-sm font-normal py-2.5 text-gray-900 dark:text-white">That is awesome. I think our users will really appreciate the improvements.</p>
+                    <p className="text-sm font-normal py-2.5">That is awesome. I think our users will really appreciate the improvements.</p>
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
                   </div>
                 </div>
@@ -114,7 +114,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
                 <textarea
                   id="message"
                   rows={2}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500   dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your thoughts here..."
                 ></textarea>
               </div>
@@ -126,7 +126,7 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
           <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-white bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
