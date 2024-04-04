@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class DatabaseInterface(ABC):
     @abstractmethod
-    def insert_one(self, username: str, pdf_name: str, tag: str, description: str):
+    def insert_one(self, data, collection_name: str):
         pass
 
     @abstractmethod

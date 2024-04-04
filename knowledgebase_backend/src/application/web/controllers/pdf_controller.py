@@ -38,8 +38,9 @@ async def upload_pdf(
     aws_interface: AwsInterface = Depends(aws_service),
     database_interface: DatabaseInterface = Depends(database_service),
 ):
-    # Get the current user
-    user = auth_interface.user_info(current_user)
+
+    # user = auth_interface.user_info(current_user)
+    user = auth_interface.get_current_user(current_user)
 
     # Check if the user is valid
     if user is None:
@@ -49,25 +50,21 @@ async def upload_pdf(
         )
 
     # Extract the filename and the content of the file. Giving a unique name is important hence the user's email is used
-    file_name = user["email"] + file.filename
+    file_name = file.filename
     file_content = await file.read()
 
     # Check if the file is empty
     if not file_name or not file_content:
         return {"message": "Please provide a file name and content"}
 
-    print(description, tag)
-
     # Upload the file to the S3 bucket
-    updated = aws_interface.upload_pdf(file_name, file_content)
+    updated = aws_interface.upload_pdf(user, file_name, file_content)
 
     # Return a success message if the file was uploaded successfully
     if updated == True:
 
         # Save the file details to the database
-        saved = database_interface.insert_one(
-            user["email"], file_name, tag, description
-        )
+        saved = database_interface.insert_one(user, file_name, tag, description)
 
         if saved is not None:
             return JSONResponse(
@@ -83,7 +80,7 @@ async def get_all_pdfs(
     database_interface: DatabaseInterface = Depends(database_service),
 ):
     # Get the current user
-    user = auth_interface.user_info(current_user)
+    user = auth_interface.get_current_user(current_user)
 
     # Check if the user is valid
     if user is None:
@@ -92,10 +89,8 @@ async def get_all_pdfs(
             content={"status": "error", "message": "Invalid token"},
         )
 
-    user_email = user["email"]
-
     # Get all the PDFs from the S3 bucket
-    pdfs = database_interface.find_all(user_email)
+    pdfs = database_interface.find_all(user)
 
     if pdfs is not None:
 
@@ -118,7 +113,7 @@ async def get_pdf_url(
     database_interface: DatabaseInterface = Depends(database_service),
 ):
     # Get the current user
-    user = auth_interface.user_info(current_user)
+    user = auth_interface.get_current_user(current_user)
 
     # Check if the user is valid
     if user is None:
@@ -128,9 +123,7 @@ async def get_pdf_url(
         )
 
     # Check if the file actually belongs to the user.
-    belongs_to_user = database_interface.check_if_file_belongs_to_user(
-        user["email"], file_name
-    )
+    belongs_to_user = database_interface.check_if_file_belongs_to_user(user, file_name)
 
     # If the file does not belong to the user, return an error message
     if belongs_to_user == False:
@@ -154,5 +147,3 @@ async def get_pdf_url(
         status_code=404,
         content={"status": "error", "message": "File not found"},
     )
-
-

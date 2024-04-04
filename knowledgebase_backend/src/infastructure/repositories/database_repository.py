@@ -10,12 +10,10 @@ class DatabaseRepository:
         self.db_knowledgebase = self.client["knowledgebase"]
 
     def insert_one(self, data: str, collection_name: str):
-        try:
 
+        try:
             # Define the collection where the data will be stored
             collection = self.db_knowledgebase[collection_name]
-
-            # Prepare the data to be stored
 
             # Insert the data into the collection
             collection.insert_one(data)
@@ -38,8 +36,6 @@ class DatabaseRepository:
             pdf_data = collection.find({field: field_value})
 
             for item in pdf_data:
-                print(item)
-
                 item["_id"] = str(item["_id"])
                 all_pdfs_of_user.append(item)
 
@@ -56,6 +52,7 @@ class DatabaseRepository:
 
             # Find the data that matches the username and pdf name
             pdf_data = collection.find_one({"username": username, "pdf_name": pdf_name})
+            print(pdf_data)
 
             if pdf_data is not None:
                 return True
@@ -64,3 +61,17 @@ class DatabaseRepository:
 
         except Exception as e:
             return False
+        
+    def find_single_document(self, field: str, field_value: str, collection_name: str):
+        try:
+
+            # Define the collection where the data will be stored
+            collection = self.db_knowledgebase[collection_name]
+
+            # Find the data that matches the username
+            result = collection.find_one({field: field_value})
+
+            # Return the data that was found
+            return result
+        except Exception as e:
+            return None

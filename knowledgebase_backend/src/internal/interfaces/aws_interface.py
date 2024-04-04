@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class AwsInterface(ABC):
-    
+
     @abstractmethod
-    def upload_pdf(self, file_name: str, file_content: bytes):
+    def upload_pdf(self, user, file_name: str, file_content: bytes):
         pass
 
     @abstractmethod

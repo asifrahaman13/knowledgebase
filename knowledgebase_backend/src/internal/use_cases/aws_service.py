@@ -9,7 +9,8 @@ class AwsService:
     def __init__(self, aws_repository=AWSRepository):
         self.aws_repository = aws_repository
 
-    def upload_pdf(self, file_name: str, file_content: bytes):
+    def upload_pdf(self, user, file_name: str, file_content: bytes):
+        file_name = user + file_name
         return self.aws_repository.upload_pdf(file_name, file_content)
 
     def get_presigned_pdf_url(self, file_name: str):

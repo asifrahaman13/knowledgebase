@@ -23,6 +23,7 @@ class DatabaseService:
         return self.database_repository.find_all("username", username, "pdfs")
 
     def check_if_file_belongs_to_user(self, username: str, pdf_name: str):
+        pdf_name = username + pdf_name
         return self.database_repository.check_if_file_belongs_to_user(
             username, pdf_name
         )
