@@ -32,10 +32,14 @@ class AWSRepository:
         try:
             # Generate a presigned URL for the file
             url = self.s3_client.generate_presigned_url(
-                "get_object",
-                Params={"Bucket": self.aws_bucket_name, "Key": file_name},
+                ClientMethod="get_object",
+                Params={"Bucket": self.aws_bucket_name, "Key": file_name,"ResponseContentDisposition": 'inline', 'ResponseContentType': 'application/pdf'},
                 ExpiresIn=self.expiration_time,
+           
             )
+            print(url)
             return url
         except Exception as e:
+            print(f"An error occurred: {e}")
             return None
+
