@@ -146,3 +146,49 @@ async def get_pdf_url(
         status_code=404,
         content={"status": "error", "message": "File not found"},
     )
+
+@aws_router.delete("/delete_pdf")
+async def delete_pdf(
+    file_name: str,
+    current_user: str = Depends(get_current_user),
+    auth_interface: AuthInterface = Depends(auth_service),
+    aws_interface: AwsInterface = Depends(aws_service),
+    database_interface: DatabaseInterface = Depends(database_service),
+):
+    # Get the current user
+    user = auth_interface.get_current_user(current_user)
+
+    # Check if the user is valid
+    if user is None:
+        return JSONResponse(
+            status_code=404,
+            content={"status": "error", "message": "Invalid token"},
+        )
+
+    # Check if the file actually belongs to the user.
+    belongs_to_user = database_interface.check_if_file_belongs_to_user(user, file_name)
+
+    # If the file does not belong to the user, return an error message
+    if belongs_to_user == False:
+        return JSONResponse(
+            status_code=404,
+            content={"status": "error", "message": "File does not belong to user"},
+        )
+
+    # Delete the file from the S3 bucket
+    # deleted = aws_interface.delete_pdf(file_name)
+
+    # If the file was deleted successfully, delete the file details from the database
+    # if deleted == True:
+    deleted_from_db = database_interface.delete_one(user, file_name)
+
+    if deleted_from_db is not None:
+            return JSONResponse(
+                status_code=200,
+                content={"status": "success", "message": "File deleted successfully"},
+            )
+
+    return JSONResponse(
+        status_code=404,
+        content={"status": "error", "message": "File not found"},
+    )

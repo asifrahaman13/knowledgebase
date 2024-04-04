@@ -20,7 +20,7 @@ class AuthRepository:
         self.google_redirect_uri = GOOGLE_REDIRECT_URI
         self.token_url = "https://oauth2.googleapis.com/token"
         self.user_info_url = "https://www.googleapis.com/oauth2/v3/userinfo"
-        self.expires_delta = timedelta(hours=6)
+        self.expires_delta = timedelta(weeks=1)
 
     # Create a refresh token
     def create_refresh_token(self, data: dict) -> str:

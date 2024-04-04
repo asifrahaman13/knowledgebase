@@ -74,6 +74,25 @@ class PdfRepository implements PdfInterface {
       return null;
     }
   }
+
+  // Logic to delete pdf from database or API
+  async deletePdf(access_token: string, pdfId: string) {
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_PORT;
+    try {
+      const response = await axios.delete(`${backend_url}/aws/delete_pdf?file_name=${pdfId}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      if (response.status === 200) {
+        return new SuccessEntity(200, response.data);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
 }
 
 export default PdfRepository;

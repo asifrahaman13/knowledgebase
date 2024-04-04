@@ -75,3 +75,18 @@ class DatabaseRepository:
             return result
         except Exception as e:
             return None
+
+    def delete_one(self, field: str, field_value: str, collection_name: str):
+        try:
+            print("field",field, field_value, collection_name)
+            # Define the collection where the data will be stored
+            collection = self.db_knowledgebase[collection_name]
+
+            # Delete the data that matches the username
+            a=collection.delete_one({field: field_value})
+            print(a)
+           
+            # Return the data that was found
+            return True
+        except Exception as e:
+            return False

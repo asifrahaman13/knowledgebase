@@ -44,6 +44,19 @@ export default function Example() {
     setUploadPdf(!uploadPdf);
     setCounter(counter + 1);
   }
+
+  async function deletePdf(pdfId: string) {
+    const access_token = localStorage.getItem("access_token") || null;
+    try {
+      if (access_token) {
+        const pdfs = await pdfInterface.deletePdf(access_token, pdfId);
+        console.log(pdfs);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div className="bg-gray-50 h-screen flex flex-col gap-12">
@@ -130,24 +143,21 @@ export default function Example() {
                     >
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                         <Menu.Item>
-                          {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}>
-                              Edit
-                            </a>
-                          )}
+                          {({ active }) => <button className={classNames(active ? "bg-gray-50" : "", " px-3 py-1 text-sm leading-6 flex justify-start w-full text-gray-900")}>Edit</button>}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => <button className={classNames(active ? "bg-gray-50" : "", " px-3 py-1 text-sm w-full flex justify-start leading-6 text-gray-900")}>Move</button>}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}>
-                              Move
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}>
+                            <button
+                              className={classNames(active ? "bg-gray-50" : "", " px-3 py-1 text-sm leading-6 flex justify-start text-gray-900 w-full")}
+                              onClick={() => {
+                                deletePdf(project.pdf_name);
+                              }}
+                            >
                               Delete
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -159,7 +169,7 @@ export default function Example() {
           </ul>
         </div>
       </div>
-      <UploadPdf key={counter} counter={counter}/>
+      <UploadPdf key={counter} counter={counter} />
     </>
   );
 }
