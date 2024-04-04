@@ -1,10 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { Fragment,  } from "react";
-import {  Transition } from "@headlessui/react";
+import { Fragment, useEffect } from "react";
+import { Transition } from "@headlessui/react";
 import { Menu } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import PdfInterface from "@/domain/interfaces/PdfInterface";
+import PdfRepository from "@/infrastructure/repositories/PdfRepository";
+import FileService from "@/domain/usecases/FileService";
+
+const pdfRepository = new PdfRepository();
+const pdfInterface: PdfInterface = new FileService(pdfRepository);
 
 const statuses = {
   Complete: "text-green-700 bg-green-50 ring-green-600/20",
@@ -64,6 +70,22 @@ function classNames(...classes: string[]) {
 }
 
 export default function Example() {
+  useEffect(() => {
+    async function fetchPdfData() {
+      const access_token = localStorage.getItem("token") || null;
+      console.log(access_token)
+      try {
+        if (access_token) {
+          const pdfs = await pdfInterface.fetchAllPdfs(access_token);
+          console.log("The pdf",pdfs);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchPdfData();
+  }, []);
   return (
     <>
       <header className="text-gray-600 body-font">
@@ -104,7 +126,9 @@ export default function Example() {
               <div className="min-w-0">
                 <div className="flex items-start gap-x-3">
                   <p className="text-sm font-semibold leading-6 text-gray-900">{project.name}</p>
-                  <p className={classNames(statuses[project.status as keyof typeof statuses], "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset")}>{project.status}</p>
+                  <p className={classNames(statuses[project.status as keyof typeof statuses], "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset")}>
+                    {project.status}
+                  </p>
                 </div>
                 <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                   <p className="whitespace-nowrap">

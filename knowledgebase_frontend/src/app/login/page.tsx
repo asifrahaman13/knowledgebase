@@ -36,6 +36,7 @@ const Login = () => {
   const initiateAuthFlow = async () => {
     const authUrlRes = await axios.get("http://localhost:8000/users/auth/google");
     const { auth_url } = authUrlRes.data;
+    console.log("Auth URL:", auth_url)
     window.location.href = auth_url; // Redirect to Google OAuth2 URL
   };
 
