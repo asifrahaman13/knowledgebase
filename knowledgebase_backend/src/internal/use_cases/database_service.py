@@ -11,10 +11,18 @@ class DatabaseService:
         self.database_repository = database_repository
 
     def insert_one(self, username: str, pdf_name: str, tag: str, description: str):
-        return self.database_repository.insert_one( username, pdf_name, tag, description)
+        data = {
+            "pdf_name": pdf_name,
+            "tag": tag,
+            "username": username,
+            "description": description,
+        }
+        return self.database_repository.insert_one(data, "pdfs")
 
     def find_all(self, username: str):
-        return self.database_repository.find_all(username)
-    
+        return self.database_repository.find_all("username", username, "pdfs")
+
     def check_if_file_belongs_to_user(self, username: str, pdf_name: str):
-        return self.database_repository.check_if_file_belongs_to_user(username, pdf_name)
+        return self.database_repository.check_if_file_belongs_to_user(
+            username, pdf_name
+        )

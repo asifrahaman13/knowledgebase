@@ -71,7 +71,7 @@ async def upload_pdf(
 
         if saved is not None:
             return JSONResponse(
-                status_code=404,
+                status_code=200,
                 content={"status": "success", "message": "File uploaded successfully"},
             )
 
@@ -104,7 +104,7 @@ async def get_all_pdfs(
 
         # Return the dat
         return JSONResponse(
-            status_code=404,
+            status_code=200,
             content={"status": "success", "pdfs": json_compatible_item_data},
         )
 
