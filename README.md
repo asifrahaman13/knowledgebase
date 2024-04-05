@@ -45,7 +45,7 @@ In windows you can manually do the same.
 
 Next update the required values in the .env file.
 
-**Next enter the data into the .env file.**
+You need to enter the data into the .env file.
 
 Now run the backend server.
 
@@ -76,7 +76,7 @@ Rename the .env.example file to .env file.
 In Unix based system you can use the following:
 
 ```bash
-mb .env.example .env
+mv .env.example .env
 ```
 
 In windows you can manually do the same.
