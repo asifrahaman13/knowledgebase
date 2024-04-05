@@ -8,7 +8,7 @@ class PdfRepository implements PdfInterface {
 
   // Logic to upload pdf to database or API
   async uploadPdf(access_token: string, file: File, description: string, tag: string) {
-    const backend_url = process.env.NEXT_PUBLIC_BACKEND_PORT;
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
     console.log(`${backend_url}/aws/upload_pdf`);
     try {
       const formData = new FormData();
@@ -37,7 +37,7 @@ class PdfRepository implements PdfInterface {
 
   // Logic to fetch pdf from database or API
   async fetchAllPdfs(access_token: string) {
-    const backend_url = process.env.NEXT_PUBLIC_BACKEND_PORT;
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
     console.log(`${backend_url}/aws/get_all_pdfs`);
     try {
       const response = await axios.get(`${backend_url}/aws/get_all_pdfs`, {
@@ -57,7 +57,7 @@ class PdfRepository implements PdfInterface {
 
   // Logic to fetch pdf from database or API
   async fetchPdfPresignedUrl(access_token: string, pdfId: string) {
-    const backend_url = process.env.NEXT_PUBLIC_BACKEND_PORT;
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
    
     try {
       const response = await axios.get(`${backend_url}/aws/get_pdf_url?file_name=${pdfId}`, {
@@ -77,7 +77,7 @@ class PdfRepository implements PdfInterface {
 
   // Logic to delete pdf from database or API
   async deletePdf(access_token: string, pdfId: string) {
-    const backend_url = process.env.NEXT_PUBLIC_BACKEND_PORT;
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
     try {
       const response = await axios.delete(`${backend_url}/aws/delete_pdf?file_name=${pdfId}`, {
         headers: {

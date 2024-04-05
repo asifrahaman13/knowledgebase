@@ -5,6 +5,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const Login = () => {
   const [token, setToken] = useState("");
@@ -43,7 +44,12 @@ const Login = () => {
   return (
     <>
 
-   {!token ? <button onClick={() => initiateAuthFlow()}>Sign in with Google 🚀</button> : <p>Token: {token}</p>} 
+      {/* {!token ? <button onClick={() => initiateAuthFlow()}>Sign in with Google 🚀</button> : <p>Token: {token}</p>}  */}
+
+      <div className="flex flex-row gap-2">
+        <Link href="/auth/signin" className="text-lg font-medium font-sans">Sign in</Link>
+        <Link href="/auth/signup" className="text-lg font-medium font-sans">Sign up</Link>
+      </div>
 
     </>
   );

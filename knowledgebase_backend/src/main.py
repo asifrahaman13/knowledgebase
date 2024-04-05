@@ -24,7 +24,7 @@ app.add_middleware(
 
 
 # Include the router from the controllers.
-app.include_router(user_controller.router, prefix="/users", tags=["users"])
+app.include_router(user_controller.router, prefix="/auth", tags=["users"])
 app.include_router(pdf_controller.aws_router, prefix="/aws", tags=["aws"])
 app.include_router(pdf_chat_controller.pdf_router, prefix="/pdf", tags=["pdf"])
 
