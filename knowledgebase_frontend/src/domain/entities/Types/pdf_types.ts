@@ -5,3 +5,8 @@ export interface PdfInfo {
   username: string;
   description: string;
 }
+
+export interface ChatResponses {
+  text: string;
+  ai: boolean;
+}

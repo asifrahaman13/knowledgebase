@@ -36,8 +36,12 @@ async def ask_question(
     pdf_interface: PdfInterface = Depends(pdf_service),
     database_interface: DatabaseInterface = Depends(database_service),
 ):
+    
+    
     # Get the current user
-    user = auth_interface.user_info(current_user)
+    user = auth_interface.get_current_user(current_user)
+
+    print(user)
 
     # Check if the user is valid
     if user is None:
@@ -48,7 +52,7 @@ async def ask_question(
 
         # Check if the file actually belongs to the user.
     belongs_to_user = database_interface.check_if_file_belongs_to_user(
-        user["email"], pdf.filename
+        user, pdf.filename
     )
 
     # If the file does not belong to the user, return an error message

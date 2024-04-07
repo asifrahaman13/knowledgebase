@@ -9,31 +9,34 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import PdfInterface from "@/domain/interfaces/PdfInterface";
 import PdfRepository from "@/infrastructure/repositories/PdfRepository";
 import FileService from "@/domain/usecases/FileService";
-import { PdfInfo } from "@/domain/entities/Types/pdf_types";
+import PdfChatRepository from "@/infrastructure/repositories/PdfChatRepository";
+import { PdfChatInterface } from "@/domain/interfaces/PdfChatInterface";
+import PdfChatService from "@/domain/usecases/pdfChatService";
+import { ChatResponses } from "@/domain/entities/Types/pdf_types";
 
 const pdfRepository = new PdfRepository();
 const pdfInterface: PdfInterface = new FileService(pdfRepository);
 
+const pdfChatRepository = new PdfChatRepository();
+const pdfChatInterface: PdfChatInterface = new PdfChatService(pdfChatRepository);
+
 export default function Page({ params }: { params: { pdf_path: string } }) {
   const [open, setOpen] = useState(false);
   const [presignedPdfUrl, setPresignedPdfUrl] = useState<string>("");
+  const [allConversations, setAllConversations] = useState<ChatResponses[]>([]);
 
   const cancelButtonRef = useRef(null);
 
   useEffect(() => {
     async function fetchPdfData() {
       const access_token = localStorage.getItem("access_token") || null;
-
-      console.log(access_token);
       try {
         if (access_token) {
           const pdfs = await pdfInterface.fetchPdfPresignedUrl(access_token, params.pdf_path);
           console.log("The pdf", pdfs);
-          if (pdfs?.code===200) {
-            console.log(pdfs?.data.url)
+          if (pdfs?.code === 200) {
             setPresignedPdfUrl(pdfs?.data.url);
           }
-
         }
       } catch (error) {
         console.log(error);
@@ -42,6 +45,38 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
 
     fetchPdfData();
   }, [params.pdf_path]);
+
+  const [question, setQuestion] = useState<string>("");
+
+  async function askQuestion() {
+    const access_token = localStorage.getItem("access_token") || null;
+    const pdfId = params.pdf_path;
+    if (access_token) {
+      console.log("The result", question);
+      const conversationDatas = {
+        text: question,
+        ai: false, // User's question, not AI's response
+      };
+      console.log("All conversation", conversationDatas);
+      const response = await pdfChatInterface.getChatResponse(access_token, pdfId, question);
+      if (response?.code === 200) {
+        console.log(response.data);
+        if (response.data) {
+          const conversationData = {
+            text: response.data.message,
+            ai: true, // AI's response
+          };
+          setAllConversations([...allConversations, conversationDatas, conversationData]);
+        }
+      }
+    }
+    console.log(allConversations);
+  }
+
+  function handleQuestionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    const { value } = e.target;
+    setQuestion(value);
+  }
 
   return (
     <>
@@ -119,35 +154,55 @@ export default function Page({ params }: { params: { pdf_path: string } }) {
             <div className="w-1/2 border-r border-gray-200 h-full  ">
               <PDFViewer filePath={presignedPdfUrl} />
             </div>
-            <div className="grow flex flex-col">
+            <div className="grow max-w-5xl flex flex-col">
               <div className="h-5/6">
                 <div className="flex items-start gap-2.5 w-full flex-col px-12 py-4 h-full overflow-y-scroll no-scrollbar">
-                  <div className="flex flex-col max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl ">
-                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <span className="text-sm font-semibold text-gray-900 dark:text-black">Bonnie Green</span>
-                      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
-                    </div>
-                    <p className="text-sm font-normal py-2.5 text-gray-900 dark:text-black">That is awesome. I think our users will really appreciate the improvements.</p>
-                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
-                  </div>
-
-                  <div className="flex flex-col ml-auto  max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl ">
-                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <span className="text-sm font-semibold ">Bonnie Green</span>
-                      <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
-                    </div>
-                    <p className="text-sm font-normal py-2.5">That is awesome. I think our users will really appreciate the improvements.</p>
-                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
-                  </div>
+                  {allConversations.map((conversation, index) => (
+                    <>
+                      {conversation.ai === true ? (
+                        <>
+                          {" "}
+                          <div className="flex flex-col lg:w-3/4 max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl " key={index}>
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                              <span className="text-sm font-semibold font-sans text-Pri-Dark">AI responses</span>
+                              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
+                            </div>
+                            <p className="text-sm font-normal py-2.5 text-gray-900 dark:text-black">{conversation.text}.</p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <div className="flex flex-col ml-auto lg:w-3/4  max-w-3/4 leading-1.5 p-4 border-gray-200 bg-white rounded-e-xl rounded-es-xl " key={index}>
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                              <span className="text-sm font-semibold font-sans text-Pri-Dark">My questions</span>
+                              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
+                            </div>
+                            <p className="text-sm font-normal py-2.5">{conversation.text}</p>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  ))}
                 </div>
               </div>
-              <div className="w-full  grow    p-4 mb-16">
+              <div className="w-full  grow flex flex-row   p-4 mb-16">
                 <textarea
                   id="message"
                   rows={2}
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500   dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your thoughts here..."
+                  onChange={(e) => {
+                    handleQuestionChange(e);
+                  }}
                 ></textarea>
+                <button
+                  onClick={() => {
+                    askQuestion();
+                  }}
+                >
+                  Ask
+                </button>
               </div>
             </div>
           </div>

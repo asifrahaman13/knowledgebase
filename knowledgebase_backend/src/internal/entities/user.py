@@ -11,7 +11,7 @@ class UserBase(BaseModel):
     username: str | None = None
     password: str | None = None
 
+
 class UserDetails(BaseModel):
     user_id: str | None = None
     username: str | None = None
-    

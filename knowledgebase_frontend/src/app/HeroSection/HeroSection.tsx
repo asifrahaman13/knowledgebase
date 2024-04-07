@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
@@ -13,6 +13,14 @@ import Link from "next/link";
 
 export default function HeroSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
+      setIsSignedIn(true);
+    }
+  }, []);
 
   return (
     <header className="sticky bg-white backdrop-filter backdrop-blur-xl inset-x-0 top-0 z-50">
@@ -83,21 +91,26 @@ export default function HeroSection() {
             </>
           ))}
 
-    <div className="inline-flex outline-none items-center gap-x-1 text-sm font-semibold leading-6 text-gray-90">
+          <div className="inline-flex outline-none items-center gap-x-1 text-sm font-semibold leading-6 text-gray-90">
             <Link href="/about">About</Link>
           </div>
 
-              <div className="inline-flex outline-none items-center gap-x-1 text-sm font-semibold leading-6 text-gray-90">
-            <Link href="/contact">
-              Contact
-            </Link>
+          <div className="inline-flex outline-none items-center gap-x-1 text-sm font-semibold leading-6 text-gray-90">
+            <Link href="/contact">Contact</Link>
           </div>
           <div className="inline-flex outline-none items-center gap-x-1 text-sm font-semibold leading-6 text-gray-90">
             <Link href="/pricing">Pricing</Link>
           </div>
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Login />
+          {isSignedIn === true ? (
+            <> Signed in</>
+          ) : (
+            <>
+              {" "}
+              <Login />
+            </>
+          )}
         </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

@@ -4,10 +4,8 @@ class TokenEntity {
   constructor(code: number, token: string) {
     this.code = code;
     this.token = token;
-    
   }
 }
-
 
 class SuccessEntity {
   code: number;

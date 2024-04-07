@@ -46,7 +46,7 @@ const Page = () => {
           </a>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  ">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight ">Create and account</h1>
+              <h1 className="text-xl font-semibold leading-tight tracking-tight font-sans">Login to your account</h1>
               <div className="space-y-4 md:space-y-6">
                 <div>
                   <label className="block mb-2 text-sm font-medium ">Your username</label>
@@ -112,7 +112,7 @@ const Page = () => {
                     handleSubmit();
                   }}
                 >
-                  Create an account
+                  Login
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}

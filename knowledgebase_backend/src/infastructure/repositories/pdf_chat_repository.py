@@ -5,7 +5,7 @@ from langchain_openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import Chroma
-from config.config import OPEN_AI_API_KEY
+from config.config import OPEN_AI_API_KEY, AWS_S3_URL
 
 
 class DocumentProcessor:
@@ -75,7 +75,7 @@ class PdfChatRepository:
 
     def __init__(self):
         self.api_key = OPEN_AI_API_KEY
-        self.aws_url = "https://asif-test-bucket-practice.s3.ap-south-1.amazonaws.com"
+        self.aws_url = AWS_S3_URL
 
     def generate_response(self, question_data, pdf_path):
         try:
